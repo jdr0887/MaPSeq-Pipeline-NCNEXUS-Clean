@@ -1,0 +1,15 @@
+<features name="mapseq-pipeline-ncnexus-clean-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0">
+
+  <feature name="mapseq-pipeline-ncnexus-clean" version="${project.version}" resolver="(obr)">
+    <bundle>mvn:edu.unc.mapseq.pipelines.ncnexus-clean/ncnexus-clean-workflow/${project.version}</bundle>
+    <bundle>mvn:edu.unc.mapseq.pipelines.ncnexus-clean/ncnexus-clean-commands/${project.version}</bundle>
+    <bundle start-level="100">mvn:edu.unc.mapseq.pipelines.ncnexus-clean/ncnexus-clean-executor/${project.version}</bundle>
+    <bundle start-level="100">mvn:edu.unc.mapseq.pipelines.ncnexus-clean/ncnexus-clean-messaging/${project.version}</bundle>
+  </feature>
+
+</features>
+
+
+
+
+
