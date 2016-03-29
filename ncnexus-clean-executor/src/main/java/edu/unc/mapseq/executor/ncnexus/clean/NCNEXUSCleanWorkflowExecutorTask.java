@@ -17,7 +17,7 @@ import edu.unc.mapseq.dao.model.WorkflowRunAttempt;
 import edu.unc.mapseq.workflow.WorkflowBeanService;
 import edu.unc.mapseq.workflow.WorkflowExecutor;
 import edu.unc.mapseq.workflow.WorkflowTPE;
-import edu.unc.mapseq.workflow.ncnexus.casava.NCNEXUSCleanWorkflow;
+import edu.unc.mapseq.workflow.ncnexus.clean.NCNEXUSCleanWorkflow;
 
 public class NCNEXUSCleanWorkflowExecutorTask extends TimerTask {
 
