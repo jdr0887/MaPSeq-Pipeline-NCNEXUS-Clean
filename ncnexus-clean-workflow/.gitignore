@@ -1,7 +1,7 @@
 .classpath
 .project
 .settings
-src/main/resources/edu/unc/mapseq/workflow/ncnexus/casava/workflow.properties
+src/main/resources/edu/unc/mapseq/workflow/ncnexus/clean/workflow.properties
 target
 tmp
 var
