@@ -41,7 +41,7 @@ public class NCNEXUSCleanWorkflow extends AbstractSampleWorkflow {
 
     @Override
     public String getVersion() {
-        ResourceBundle bundle = ResourceBundle.getBundle("edu/unc/mapseq/workflow/ncnexus/baseline/workflow");
+        ResourceBundle bundle = ResourceBundle.getBundle("edu/unc/mapseq/workflow/ncnexus/clean/workflow");
         String version = bundle.getString("version");
         return StringUtils.isNotEmpty(version) ? version : "0.0.1-SNAPSHOT";
     }
