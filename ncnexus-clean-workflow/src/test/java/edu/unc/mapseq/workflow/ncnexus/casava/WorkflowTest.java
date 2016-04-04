@@ -17,7 +17,8 @@ import edu.unc.mapseq.module.core.CopyFileCLI;
 import edu.unc.mapseq.module.core.MakeCLI;
 import edu.unc.mapseq.module.sequencing.casava.ConfigureBCLToFastqCLI;
 import edu.unc.mapseq.workflow.WorkflowException;
-import edu.unc.mapseq.workflow.impl.WorkflowJobFactory;
+import edu.unc.mapseq.workflow.core.WorkflowJobFactory;
+import edu.unc.mapseq.workflow.sequencing.SequencingWorkflowJobFactory;
 
 public class WorkflowTest {
 
@@ -29,34 +30,34 @@ public class WorkflowTest {
         int count = 0;
 
         try {
-            CondorJob configureBCLToFastQJob = WorkflowJobFactory.createJob(++count, ConfigureBCLToFastqCLI.class, null)
+            CondorJob configureBCLToFastQJob = SequencingWorkflowJobFactory.createJob(++count, ConfigureBCLToFastqCLI.class, null)
                     .build();
             graph.addVertex(configureBCLToFastQJob);
 
-            CondorJob makeJob = WorkflowJobFactory.createJob(++count, MakeCLI.class, null).build();
+            CondorJob makeJob = SequencingWorkflowJobFactory.createJob(++count, MakeCLI.class, null).build();
             graph.addVertex(makeJob);
             graph.addEdge(configureBCLToFastQJob, makeJob);
 
-            CondorJob copyRead1Job = WorkflowJobFactory.createJob(++count, CopyFileCLI.class, null).build();
+            CondorJob copyRead1Job = SequencingWorkflowJobFactory.createJob(++count, CopyFileCLI.class, null).build();
             graph.addVertex(copyRead1Job);
             graph.addEdge(makeJob, copyRead1Job);
 
-            CondorJob copyRead2Job = WorkflowJobFactory.createJob(++count, CopyFileCLI.class, null).build();
+            CondorJob copyRead2Job = SequencingWorkflowJobFactory.createJob(++count, CopyFileCLI.class, null).build();
             graph.addVertex(copyRead2Job);
             graph.addEdge(makeJob, copyRead2Job);
 
-            configureBCLToFastQJob = WorkflowJobFactory.createJob(++count, ConfigureBCLToFastqCLI.class, null).build();
+            configureBCLToFastQJob = SequencingWorkflowJobFactory.createJob(++count, ConfigureBCLToFastqCLI.class, null).build();
             graph.addVertex(configureBCLToFastQJob);
 
-            makeJob = WorkflowJobFactory.createJob(++count, MakeCLI.class, null).build();
+            makeJob = SequencingWorkflowJobFactory.createJob(++count, MakeCLI.class, null).build();
             graph.addVertex(makeJob);
             graph.addEdge(configureBCLToFastQJob, makeJob);
 
-            copyRead1Job = WorkflowJobFactory.createJob(++count, CopyFileCLI.class, null).build();
+            copyRead1Job = SequencingWorkflowJobFactory.createJob(++count, CopyFileCLI.class, null).build();
             graph.addVertex(copyRead1Job);
             graph.addEdge(makeJob, copyRead1Job);
 
-            copyRead2Job = WorkflowJobFactory.createJob(++count, CopyFileCLI.class, null).build();
+            copyRead2Job = SequencingWorkflowJobFactory.createJob(++count, CopyFileCLI.class, null).build();
             graph.addVertex(copyRead2Job);
             graph.addEdge(makeJob, copyRead2Job);
 
