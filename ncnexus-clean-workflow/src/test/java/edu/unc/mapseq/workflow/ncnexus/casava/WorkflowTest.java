@@ -17,7 +17,6 @@ import edu.unc.mapseq.module.core.CopyFileCLI;
 import edu.unc.mapseq.module.core.MakeCLI;
 import edu.unc.mapseq.module.sequencing.casava.ConfigureBCLToFastqCLI;
 import edu.unc.mapseq.workflow.WorkflowException;
-import edu.unc.mapseq.workflow.core.WorkflowJobFactory;
 import edu.unc.mapseq.workflow.sequencing.SequencingWorkflowJobFactory;
 
 public class WorkflowTest {
@@ -30,8 +29,8 @@ public class WorkflowTest {
         int count = 0;
 
         try {
-            CondorJob configureBCLToFastQJob = SequencingWorkflowJobFactory.createJob(++count, ConfigureBCLToFastqCLI.class, null)
-                    .build();
+            CondorJob configureBCLToFastQJob = SequencingWorkflowJobFactory
+                    .createJob(++count, ConfigureBCLToFastqCLI.class, null).build();
             graph.addVertex(configureBCLToFastQJob);
 
             CondorJob makeJob = SequencingWorkflowJobFactory.createJob(++count, MakeCLI.class, null).build();
@@ -46,7 +45,8 @@ public class WorkflowTest {
             graph.addVertex(copyRead2Job);
             graph.addEdge(makeJob, copyRead2Job);
 
-            configureBCLToFastQJob = SequencingWorkflowJobFactory.createJob(++count, ConfigureBCLToFastqCLI.class, null).build();
+            configureBCLToFastQJob = SequencingWorkflowJobFactory.createJob(++count, ConfigureBCLToFastqCLI.class, null)
+                    .build();
             graph.addVertex(configureBCLToFastQJob);
 
             makeJob = SequencingWorkflowJobFactory.createJob(++count, MakeCLI.class, null).build();
