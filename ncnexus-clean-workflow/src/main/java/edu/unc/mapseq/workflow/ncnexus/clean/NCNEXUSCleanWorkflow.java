@@ -22,11 +22,12 @@ import edu.unc.mapseq.dao.model.Sample;
 import edu.unc.mapseq.dao.model.WorkflowRunAttempt;
 import edu.unc.mapseq.module.core.RemoveCLI;
 import edu.unc.mapseq.workflow.WorkflowException;
-import edu.unc.mapseq.workflow.impl.AbstractSampleWorkflow;
-import edu.unc.mapseq.workflow.impl.SampleWorkflowUtil;
-import edu.unc.mapseq.workflow.impl.WorkflowJobFactory;
+import edu.unc.mapseq.workflow.core.WorkflowJobFactory;
+import edu.unc.mapseq.workflow.sequencing.AbstractSequencingWorkflow;
+import edu.unc.mapseq.workflow.sequencing.SequencingWorkflowJobFactory;
+import edu.unc.mapseq.workflow.sequencing.SequencingWorkflowUtil;
 
-public class NCNEXUSCleanWorkflow extends AbstractSampleWorkflow {
+public class NCNEXUSCleanWorkflow extends AbstractSequencingWorkflow {
 
     private static final Logger logger = LoggerFactory.getLogger(NCNEXUSCleanWorkflow.class);
 
@@ -89,7 +90,7 @@ public class NCNEXUSCleanWorkflow extends AbstractSampleWorkflow {
 
             File outputDirectory = new File(sample.getOutputDirectory(), "NCNEXUSBaseline");
 
-            List<File> readPairList = SampleWorkflowUtil.getReadPairList(sample);
+            List<File> readPairList = SequencingWorkflowUtil.getReadPairList(sample);
             logger.debug("readPairList.size(): {}", readPairList.size());
 
             if (readPairList.size() != 2) {
@@ -97,10 +98,10 @@ public class NCNEXUSCleanWorkflow extends AbstractSampleWorkflow {
             }
 
             File r1FastqFile = readPairList.get(0);
-            String r1FastqRootName = SampleWorkflowUtil.getRootFastqName(r1FastqFile.getName());
+            String r1FastqRootName = SequencingWorkflowUtil.getRootFastqName(r1FastqFile.getName());
 
             File r2FastqFile = readPairList.get(1);
-            String r2FastqRootName = SampleWorkflowUtil.getRootFastqName(r2FastqFile.getName());
+            String r2FastqRootName = SequencingWorkflowUtil.getRootFastqName(r2FastqFile.getName());
 
             String fastqLaneRootName = StringUtils.removeEnd(r2FastqRootName, "_R2");
 
@@ -140,7 +141,7 @@ public class NCNEXUSCleanWorkflow extends AbstractSampleWorkflow {
                         picardFixMateOutput.getName().replace(".bam", ".bai"));
 
                 // new job
-                CondorJobBuilder builder = WorkflowJobFactory
+                CondorJobBuilder builder = SequencingWorkflowJobFactory
                         .createJob(++count, RemoveCLI.class, attempt.getId(), sample.getId()).siteName(siteName);
                 builder.addArgument(RemoveCLI.FILE, saiR1OutFile.getAbsolutePath())
                         .addArgument(RemoveCLI.FILE, saiR2OutFile.getAbsolutePath())
