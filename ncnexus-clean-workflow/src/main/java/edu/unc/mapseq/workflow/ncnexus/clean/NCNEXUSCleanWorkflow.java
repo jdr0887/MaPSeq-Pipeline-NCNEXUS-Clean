@@ -78,6 +78,24 @@ public class NCNEXUSCleanWorkflow extends AbstractSequencingWorkflow {
                         .siteName(siteName);
                 builder.addArgument(RemoveCLI.FILE, flowcellStagingDir.getAbsolutePath());
             }
+
+            Set<Integer> laneSet = new HashSet<>();
+            sampleSet.forEach(a -> laneSet.add(a.getLaneIndex()));
+            Collections.synchronizedSet(laneSet);
+
+            File bclDir = new File(flowcell.getBaseDirectory());
+            File bclFlowcellDir = new File(bclDir, flowcell.getName());
+
+            for (Integer lane : laneSet) {
+                File unalignedDir = new File(bclFlowcellDir, String.format("%s.%d", "Unaligned", lane.toString()));
+                CondorJobBuilder builder = WorkflowJobFactory.createJob(++count, RemoveCLI.class, attempt.getId())
+                        .siteName(siteName);
+                builder.addArgument(RemoveCLI.FILE, unalignedDir);
+                CondorJob removeUnalignedDirectoryJob = builder.build();
+                logger.info(removeUnalignedDirectoryJob.toString());
+                graph.addVertex(removeUnalignedDirectoryJob);
+            }
+
         }
 
         for (Sample sample : sampleSet) {
