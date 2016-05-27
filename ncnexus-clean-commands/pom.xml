@@ -2,13 +2,13 @@
   <parent>
     <groupId>edu.unc.mapseq.pipelines</groupId>
     <artifactId>ncnexus-clean</artifactId>
-    <version>0.6.14-SNAPSHOT</version>
+    <version>0.6.14</version>
   </parent>
   <name>MaPSeq :: Pipelines :: NCNEXUS :: Clean :: Commands</name>
   <modelVersion>4.0.0</modelVersion>
   <groupId>edu.unc.mapseq.pipelines.ncnexus-clean</groupId>
   <artifactId>ncnexus-clean-commands</artifactId>
-  <version>0.6.14-SNAPSHOT</version>
+  <version>0.6.14</version>
   <packaging>bundle</packaging>
   <dependencies>
     <dependency>
