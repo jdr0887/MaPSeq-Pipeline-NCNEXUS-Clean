@@ -50,10 +50,17 @@ public class NCNEXUSCleanWorkflowExecutorTask extends TimerTask {
         WorkflowRunAttemptDAO workflowRunAttemptDAO = mapseqDAOBeanService.getWorkflowRunAttemptDAO();
 
         try {
+            Workflow workflow = null;
             List<Workflow> workflowList = workflowDAO.findByName(getWorkflowName());
-
             if (CollectionUtils.isEmpty(workflowList)) {
-                logger.error("No Workflow Found: {}", getWorkflowName());
+                workflow = new Workflow(getWorkflowName());
+                workflow.setId(workflowDAO.save(workflow));
+            } else {
+                workflow = workflowList.get(0);
+            }
+
+            if (workflow == null) {
+                logger.error("Could not find or create {} workflow", getWorkflowName());
                 return;
             }
 
