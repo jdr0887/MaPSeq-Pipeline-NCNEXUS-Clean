@@ -7,6 +7,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,6 @@ import edu.unc.mapseq.dao.MaPSeqDAOBeanService;
 import edu.unc.mapseq.dao.MaPSeqDAOException;
 import edu.unc.mapseq.dao.WorkflowDAO;
 import edu.unc.mapseq.dao.WorkflowRunAttemptDAO;
-import edu.unc.mapseq.dao.WorkflowRunDAO;
 import edu.unc.mapseq.dao.model.Workflow;
 import edu.unc.mapseq.dao.model.WorkflowRun;
 import edu.unc.mapseq.dao.model.WorkflowRunAttempt;
@@ -73,27 +73,16 @@ public class NCNEXUSCleanMessageListener extends AbstractSequencingMessageListen
 
         MaPSeqDAOBeanService daoBean = getWorkflowBeanService().getMaPSeqDAOBeanService();
         WorkflowDAO workflowDAO = daoBean.getWorkflowDAO();
-        WorkflowRunDAO workflowRunDAO = daoBean.getWorkflowRunDAO();
         WorkflowRunAttemptDAO workflowRunAttemptDAO = daoBean.getWorkflowRunAttemptDAO();
 
-        Workflow workflow = null;
         try {
-            List<Workflow> workflowList = workflowDAO.findByName("NCNEXUSClean");
-            if (workflowList == null || (workflowList != null && workflowList.isEmpty())) {
-                logger.error("No Workflow Found: {}", "NCNEXUSClean");
+            List<Workflow> workflowList = workflowDAO.findByName(getWorkflowName());
+            if (CollectionUtils.isEmpty(workflowList)) {
+                logger.error("No Workflow Found: {}", getWorkflowName());
                 return;
             }
-            workflow = workflowList.get(0);
-        } catch (MaPSeqDAOException e) {
-            logger.error("ERROR", e);
-        }
-
-        try {
+            Workflow workflow = workflowList.get(0);
             WorkflowRun workflowRun = createWorkflowRun(workflowMessage, workflow);
-
-            Long workflowRunId = workflowRunDAO.save(workflowRun);
-            workflowRun.setId(workflowRunId);
-
             WorkflowRunAttempt attempt = new WorkflowRunAttempt();
             attempt.setStatus(WorkflowRunAttemptStatusType.PENDING);
             attempt.setWorkflowRun(workflowRun);
