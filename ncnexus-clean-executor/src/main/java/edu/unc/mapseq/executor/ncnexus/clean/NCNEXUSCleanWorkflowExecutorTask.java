@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.TimerTask;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,6 +67,10 @@ public class NCNEXUSCleanWorkflowExecutorTask extends TimerTask {
                 return;
             }
 
+            BundleContext bundleContext = FrameworkUtil.getBundle(getClass()).getBundleContext();
+            Bundle bundle = bundleContext.getBundle();
+            String version = bundle.getVersion().toString();
+
             List<WorkflowRunAttempt> attempts = workflowRunAttemptDAO.findEnqueued(workflowList.get(0).getId());
 
             if (CollectionUtils.isNotEmpty(attempts)) {
@@ -72,7 +79,7 @@ public class NCNEXUSCleanWorkflowExecutorTask extends TimerTask {
                 for (WorkflowRunAttempt attempt : attempts) {
 
                     NCNEXUSCleanWorkflow cleanWorkflow = new NCNEXUSCleanWorkflow();
-                    attempt.setVersion(cleanWorkflow.getVersion());
+                    attempt.setVersion(version);
                     attempt.setDequeued(new Date());
                     workflowRunAttemptDAO.save(attempt);
 
