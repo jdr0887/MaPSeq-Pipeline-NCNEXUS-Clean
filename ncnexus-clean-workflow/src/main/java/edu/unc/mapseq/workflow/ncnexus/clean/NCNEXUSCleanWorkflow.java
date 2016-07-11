@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
@@ -16,11 +17,13 @@ import org.renci.jlrm.condor.CondorJobEdge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.unc.mapseq.dao.MaPSeqDAOBeanService;
+import edu.unc.mapseq.dao.MaPSeqDAOException;
 import edu.unc.mapseq.dao.model.Flowcell;
 import edu.unc.mapseq.dao.model.Sample;
+import edu.unc.mapseq.dao.model.Workflow;
 import edu.unc.mapseq.dao.model.WorkflowRunAttempt;
 import edu.unc.mapseq.module.core.RemoveCLI;
-import edu.unc.mapseq.workflow.SystemType;
 import edu.unc.mapseq.workflow.WorkflowException;
 import edu.unc.mapseq.workflow.core.WorkflowJobFactory;
 import edu.unc.mapseq.workflow.sequencing.AbstractSequencingWorkflow;
@@ -33,16 +36,6 @@ public class NCNEXUSCleanWorkflow extends AbstractSequencingWorkflow {
 
     public NCNEXUSCleanWorkflow() {
         super();
-    }
-
-    @Override
-    public String getName() {
-        return NCNEXUSCleanWorkflow.class.getSimpleName().replace("Workflow", "");
-    }
-
-    @Override
-    public SystemType getSystem() {
-        return SystemType.PRODUCTION;
     }
 
     @Override
@@ -96,6 +89,18 @@ public class NCNEXUSCleanWorkflow extends AbstractSequencingWorkflow {
 
         }
 
+        MaPSeqDAOBeanService daoBean = getWorkflowBeanService().getMaPSeqDAOBeanService();
+
+        Workflow baselineWorkflow = null;
+        try {
+            List<Workflow> workflowList = daoBean.getWorkflowDAO().findByName("NCNEXUSBaseline");
+            if (CollectionUtils.isNotEmpty(workflowList)) {
+                baselineWorkflow = workflowList.get(0);
+            }
+        } catch (MaPSeqDAOException e1) {
+            e1.printStackTrace();
+        }
+
         for (Sample sample : sampleSet) {
 
             if ("Undetermined".equals(sample.getBarcode())) {
@@ -103,8 +108,6 @@ public class NCNEXUSCleanWorkflow extends AbstractSequencingWorkflow {
             }
 
             logger.debug(sample.toString());
-
-            File outputDirectory = new File(sample.getOutputDirectory(), "NCNEXUSBaseline");
 
             List<File> readPairList = SequencingWorkflowUtil.getReadPairList(sample);
             logger.debug("readPairList.size(): {}", readPairList.size());
@@ -122,6 +125,8 @@ public class NCNEXUSCleanWorkflow extends AbstractSequencingWorkflow {
             String fastqLaneRootName = StringUtils.removeEnd(r2FastqRootName, "_R2");
 
             try {
+
+                File outputDirectory = SequencingWorkflowUtil.createOutputDirectory(sample, baselineWorkflow);
 
                 File saiR1OutFile = new File(outputDirectory, r1FastqRootName + ".sai");
 
