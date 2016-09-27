@@ -23,14 +23,12 @@ public class WorkflowTest {
 
     @Test
     public void createDOT() {
-        DirectedGraph<CondorJob, CondorJobEdge> graph = new DefaultDirectedGraph<CondorJob, CondorJobEdge>(
-                CondorJobEdge.class);
+        DirectedGraph<CondorJob, CondorJobEdge> graph = new DefaultDirectedGraph<CondorJob, CondorJobEdge>(CondorJobEdge.class);
 
         int count = 0;
 
         try {
-            CondorJob configureBCLToFastQJob = SequencingWorkflowJobFactory
-                    .createJob(++count, ConfigureBCLToFastqCLI.class, null).build();
+            CondorJob configureBCLToFastQJob = SequencingWorkflowJobFactory.createJob(++count, ConfigureBCLToFastqCLI.class, null).build();
             graph.addVertex(configureBCLToFastQJob);
 
             CondorJob makeJob = SequencingWorkflowJobFactory.createJob(++count, MakeCLI.class, null).build();
@@ -45,8 +43,7 @@ public class WorkflowTest {
             graph.addVertex(copyRead2Job);
             graph.addEdge(makeJob, copyRead2Job);
 
-            configureBCLToFastQJob = SequencingWorkflowJobFactory.createJob(++count, ConfigureBCLToFastqCLI.class, null)
-                    .build();
+            configureBCLToFastQJob = SequencingWorkflowJobFactory.createJob(++count, ConfigureBCLToFastqCLI.class, null).build();
             graph.addVertex(configureBCLToFastQJob);
 
             makeJob = SequencingWorkflowJobFactory.createJob(++count, MakeCLI.class, null).build();
@@ -82,8 +79,8 @@ public class WorkflowTest {
         Properties properties = new Properties();
         properties.put("rankdir", "LR");
 
-        CondorDOTExporter<CondorJob, CondorJobEdge> dotExporter = new CondorDOTExporter<CondorJob, CondorJobEdge>(vnpId,
-                vnpLabel, null, null, null, properties);
+        CondorDOTExporter<CondorJob, CondorJobEdge> dotExporter = new CondorDOTExporter<CondorJob, CondorJobEdge>(vnpId, vnpLabel, null, null, null,
+                properties);
         File srcSiteResourcesImagesDir = new File("../src/site/resources/images");
         if (!srcSiteResourcesImagesDir.exists()) {
             srcSiteResourcesImagesDir.mkdirs();

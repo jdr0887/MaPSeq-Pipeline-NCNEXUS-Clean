@@ -20,8 +20,7 @@ public class MessageTest {
 
     @Test
     public void testQueue() {
-        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
-                String.format("nio://%s:61616", "152.19.198.146"));
+        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(String.format("nio://%s:61616", "152.19.198.146"));
         Connection connection = null;
         Session session = null;
         try {
@@ -32,8 +31,7 @@ public class MessageTest {
             producer.setDeliveryMode(DeliveryMode.PERSISTENT);
 
             String format = "{\"entities\":[{\"entityType\":\"FileData\",\"id\":\"%d\"},{\"entityType\":\"WorkflowRun\",\"name\":\"%s\"}]}";
-            producer.send(session
-                    .createTextMessage(String.format(format, 775487, "150714_UNC16-SN851_0572_BH5N2KBCXX_CASAVA")));
+            producer.send(session.createTextMessage(String.format(format, 775487, "150714_UNC16-SN851_0572_BH5N2KBCXX_CASAVA")));
 
         } catch (JMSException e) {
             e.printStackTrace();

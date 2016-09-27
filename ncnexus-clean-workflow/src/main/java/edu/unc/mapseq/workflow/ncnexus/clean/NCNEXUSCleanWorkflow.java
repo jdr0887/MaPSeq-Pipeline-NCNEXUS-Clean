@@ -42,8 +42,7 @@ public class NCNEXUSCleanWorkflow extends AbstractSequencingWorkflow {
     public Graph<CondorJob, CondorJobEdge> createGraph() throws WorkflowException {
         logger.info("ENTERING createGraph()");
 
-        DirectedGraph<CondorJob, CondorJobEdge> graph = new DefaultDirectedGraph<CondorJob, CondorJobEdge>(
-                CondorJobEdge.class);
+        DirectedGraph<CondorJob, CondorJobEdge> graph = new DefaultDirectedGraph<CondorJob, CondorJobEdge>(CondorJobEdge.class);
 
         int count = 0;
 
@@ -65,8 +64,7 @@ public class NCNEXUSCleanWorkflow extends AbstractSequencingWorkflow {
         for (Flowcell flowcell : flowcells) {
             File flowcellStagingDir = new File(flowcellStagingDirectory, flowcell.getName());
             if (flowcellStagingDir.exists()) {
-                CondorJobBuilder builder = WorkflowJobFactory.createJob(++count, RemoveCLI.class, attempt.getId())
-                        .siteName(siteName);
+                CondorJobBuilder builder = WorkflowJobFactory.createJob(++count, RemoveCLI.class, attempt.getId()).siteName(siteName);
                 builder.addArgument(RemoveCLI.FILE, flowcellStagingDir.getAbsolutePath());
             }
 
@@ -79,8 +77,7 @@ public class NCNEXUSCleanWorkflow extends AbstractSequencingWorkflow {
 
             for (Integer lane : laneSet) {
                 File unalignedDir = new File(bclFlowcellDir, String.format("%s.%d", "Unaligned", lane.toString()));
-                CondorJobBuilder builder = WorkflowJobFactory.createJob(++count, RemoveCLI.class, attempt.getId())
-                        .siteName(siteName);
+                CondorJobBuilder builder = WorkflowJobFactory.createJob(++count, RemoveCLI.class, attempt.getId()).siteName(siteName);
                 builder.addArgument(RemoveCLI.FILE, unalignedDir);
                 CondorJob removeUnalignedDirectoryJob = builder.build();
                 logger.info(removeUnalignedDirectoryJob.toString());
@@ -134,38 +131,28 @@ public class NCNEXUSCleanWorkflow extends AbstractSequencingWorkflow {
 
                 File bwaSAMPairedEndOutFile = new File(outputDirectory, fastqLaneRootName + ".sam");
 
-                File fixRGOutput = new File(outputDirectory,
-                        bwaSAMPairedEndOutFile.getName().replace(".sam", ".rg.bam"));
+                File fixRGOutput = new File(outputDirectory, bwaSAMPairedEndOutFile.getName().replace(".sam", ".rg.bam"));
 
-                File picardAddOrReplaceReadGroupsIndexOut = new File(outputDirectory,
-                        fixRGOutput.getName().replace(".bam", ".bai"));
+                File picardAddOrReplaceReadGroupsIndexOut = new File(outputDirectory, fixRGOutput.getName().replace(".bam", ".bai"));
 
-                File picardMarkDuplicatesMetricsFile = new File(outputDirectory,
-                        fixRGOutput.getName().replace(".bam", ".md.metrics"));
+                File picardMarkDuplicatesMetricsFile = new File(outputDirectory, fixRGOutput.getName().replace(".bam", ".md.metrics"));
 
-                File picardMarkDuplicatesOutput = new File(outputDirectory,
-                        fixRGOutput.getName().replace(".bam", ".md.bam"));
+                File picardMarkDuplicatesOutput = new File(outputDirectory, fixRGOutput.getName().replace(".bam", ".md.bam"));
 
-                File picardMarkDuplicatesIndexOut = new File(outputDirectory,
-                        picardMarkDuplicatesOutput.getName().replace(".bam", ".bai"));
+                File picardMarkDuplicatesIndexOut = new File(outputDirectory, picardMarkDuplicatesOutput.getName().replace(".bam", ".bai"));
 
-                File realignTargetCreatorOut = new File(outputDirectory,
-                        picardMarkDuplicatesOutput.getName().replace(".bam", ".targets.intervals"));
+                File realignTargetCreatorOut = new File(outputDirectory, picardMarkDuplicatesOutput.getName().replace(".bam", ".targets.intervals"));
 
-                File indelRealignerOut = new File(outputDirectory,
-                        picardMarkDuplicatesOutput.getName().replace(".bam", ".ir.bam"));
+                File indelRealignerOut = new File(outputDirectory, picardMarkDuplicatesOutput.getName().replace(".bam", ".ir.bam"));
 
-                File picardFixMateOutput = new File(outputDirectory,
-                        indelRealignerOut.getName().replace(".bam", ".fm.bam"));
+                File picardFixMateOutput = new File(outputDirectory, indelRealignerOut.getName().replace(".bam", ".fm.bam"));
 
-                File picardFixMateIndexOut = new File(outputDirectory,
-                        picardFixMateOutput.getName().replace(".bam", ".bai"));
+                File picardFixMateIndexOut = new File(outputDirectory, picardFixMateOutput.getName().replace(".bam", ".bai"));
 
                 // new job
-                CondorJobBuilder builder = SequencingWorkflowJobFactory
-                        .createJob(++count, RemoveCLI.class, attempt.getId(), sample.getId()).siteName(siteName);
-                builder.addArgument(RemoveCLI.FILE, saiR1OutFile.getAbsolutePath())
-                        .addArgument(RemoveCLI.FILE, saiR2OutFile.getAbsolutePath())
+                CondorJobBuilder builder = SequencingWorkflowJobFactory.createJob(++count, RemoveCLI.class, attempt.getId(), sample.getId())
+                        .siteName(siteName);
+                builder.addArgument(RemoveCLI.FILE, saiR1OutFile.getAbsolutePath()).addArgument(RemoveCLI.FILE, saiR2OutFile.getAbsolutePath())
                         .addArgument(RemoveCLI.FILE, bwaSAMPairedEndOutFile.getAbsolutePath())
                         .addArgument(RemoveCLI.FILE, picardMarkDuplicatesOutput.getAbsolutePath())
                         .addArgument(RemoveCLI.FILE, picardMarkDuplicatesIndexOut.getAbsolutePath())

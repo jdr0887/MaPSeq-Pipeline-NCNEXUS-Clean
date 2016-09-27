@@ -44,9 +44,8 @@ public class NCNEXUSCleanWorkflowExecutorTask extends TimerTask {
         threadPoolExecutor.setCorePoolSize(workflowBeanService.getCorePoolSize());
         threadPoolExecutor.setMaximumPoolSize(workflowBeanService.getMaxPoolSize());
 
-        logger.info(String.format("ActiveCount: %d, TaskCount: %d, CompletedTaskCount: %d",
-                threadPoolExecutor.getActiveCount(), threadPoolExecutor.getTaskCount(),
-                threadPoolExecutor.getCompletedTaskCount()));
+        logger.info(String.format("ActiveCount: %d, TaskCount: %d, CompletedTaskCount: %d", threadPoolExecutor.getActiveCount(),
+                threadPoolExecutor.getTaskCount(), threadPoolExecutor.getCompletedTaskCount()));
 
         MaPSeqDAOBeanService mapseqDAOBeanService = this.workflowBeanService.getMaPSeqDAOBeanService();
 
