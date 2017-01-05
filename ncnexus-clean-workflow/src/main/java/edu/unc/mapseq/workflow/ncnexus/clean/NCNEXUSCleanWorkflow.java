@@ -71,13 +71,11 @@ public class NCNEXUSCleanWorkflow extends AbstractSequencingWorkflow {
 
             for (Integer lane : laneSet) {
                 File unalignedDir = new File(bclFlowcellDir, String.format("%s.%d", "Unaligned", lane));
-                if (unalignedDir.exists()) {
-                    CondorJobBuilder builder = WorkflowJobFactory.createJob(++count, RemoveCLI.class, attempt.getId()).siteName(siteName);
-                    builder.addArgument(RemoveCLI.FILE, unalignedDir);
-                    CondorJob removeUnalignedDirectoryJob = builder.build();
-                    logger.info(removeUnalignedDirectoryJob.toString());
-                    graph.addVertex(removeUnalignedDirectoryJob);
-                }
+                CondorJobBuilder builder = WorkflowJobFactory.createJob(++count, RemoveCLI.class, attempt.getId()).siteName(siteName);
+                builder.addArgument(RemoveCLI.FILE, unalignedDir);
+                CondorJob removeUnalignedDirectoryJob = builder.build();
+                logger.info(removeUnalignedDirectoryJob.toString());
+                graph.addVertex(removeUnalignedDirectoryJob);
             }
 
         }
