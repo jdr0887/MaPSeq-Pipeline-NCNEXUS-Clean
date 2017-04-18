@@ -10,6 +10,9 @@
   <artifactId>ncnexus-clean-messaging</artifactId>
   <version>0.6.48-SNAPSHOT</version>
   <packaging>bundle</packaging>
+  <properties>
+    <maven.site.plugin.skip>true</maven.site.plugin.skip>    
+  </properties>      
   <dependencies>
     <dependency>
       <groupId>edu.unc.mapseq.pipelines.ncnexus-clean</groupId>
